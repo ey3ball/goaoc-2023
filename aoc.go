@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"github.com/ey3ball/goaoc-2023/day01"
+	"github.com/ey3ball/goaoc-2023/day02"
 )
 
 func main() {
@@ -17,11 +17,11 @@ func main() {
 	scanner := bufio.NewScanner(f)
 
 	fmt.Println("Part 1")
-	day01.Part1(scanner)
+	day02.Part1(scanner)
 
 	f.Seek(0, 0)
 	scanner = bufio.NewScanner(f)
 
 	fmt.Println("Part 2")
-	day01.Part2(scanner)
+	day02.Part2(scanner)
 }
