@@ -9,21 +9,26 @@ import (
 
 type Pos struct {x,y int}
 
-func newserial(serials *map[int][]Pos, num string, pos *[]Pos) (string, []Pos) {
+func newserial(serials *[]Serial, num string, pos *[]Pos) (string, []Pos) {
 	serial, _ := strconv.Atoi(num)
-	(*serials)[serial] = *pos
+	*serials = append(*serials, Serial{serial, *pos})
 
 	return "", make([]Pos, 0)
 }
 
+type Serial struct {
+	ser int
+	pos []Pos
+}
+
 type Input struct {
 	symbols map[Pos]rune
-	serials map[int][]Pos
+	serials []Serial
 }
 
 func parse(scanner *bufio.Scanner) Input {
 	symbols := make(map[Pos]rune)
-	serials := make(map[int][]Pos)
+	serials := make([]Serial, 0)
 
 	l := 0
 	for scanner.Scan() {
@@ -72,11 +77,13 @@ func neigh(pos []Pos, pos2 Pos) bool {
 func Part1(scanner *bufio.Scanner) {
 	in := parse(scanner)
 
-	acc := 0
-	for serial, pos := range(in.serials) {
-		for symbol_pos, _ := range(in.symbols) {
-			if neigh(pos, symbol_pos) {
-				acc += serial
+	fmt.Println(in.symbols)
+	fmt.Println(len(in.symbols))
+	acc := int64(0)
+	for _, serial := range(in.serials) {
+		for symbol_pos := range in.symbols {
+			if neigh(serial.pos, symbol_pos) {
+				acc += int64(serial.ser)
 				break
 			}
 		}
