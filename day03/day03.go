@@ -92,5 +92,23 @@ func Part1(scanner *bufio.Scanner) {
 }
 
 func Part2(scanner *bufio.Scanner) {
+	in := parse(scanner)
 
+	acc := 0
+	for symbol_pos, r := range in.symbols {
+		if r != '*' {
+			continue
+		}
+
+		serials := make([]int, 0)
+		for _, serial := range(in.serials) {
+			if neigh(serial.pos, symbol_pos) {
+				serials = append(serials, serial.ser)
+			}
+		}
+		if len(serials) == 2 {
+			acc += serials[0] * serials[1]
+		}
+	}
+	fmt.Println(acc)
 }
