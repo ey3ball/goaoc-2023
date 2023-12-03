@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("./input/day01.txt")
+	f, err := os.Open("./input/day02.txt")
 	if err != nil {
 		fmt.Println("Bye")
 		return
