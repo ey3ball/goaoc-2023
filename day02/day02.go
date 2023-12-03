@@ -90,5 +90,31 @@ func Part1(scanner *bufio.Scanner) {
 }
 
 func Part2(scanner *bufio.Scanner) {
+	games := parse(scanner)
 
+	acc := int64(0)
+	for _, game := range(games) {
+		min := Draw{
+			red:   0,
+			blue:  0,
+			green: 0,
+		}
+
+
+		for _, draw := range(game) {
+			if draw.blue > min.blue {
+				min.blue = draw.blue
+			}
+			if draw.red > min.red {
+				min.red = draw.red
+			}
+			if draw.green > min.green {
+				min.green = draw.green
+			}
+		}
+		power := min.red * min.blue * min.green
+		fmt.Println(power)
+		acc += int64(power)
+	}
+	fmt.Println(acc)
 }
