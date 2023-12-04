@@ -71,6 +71,18 @@ func score(got []int, winners map[int]bool) int64 {
 	return acc
 }
 
+func matches(got []int, winners map[int]bool) int {
+	acc := 0
+
+	for _, n := range(got) {
+		if winners[n] {
+			acc += 1
+		}
+	}
+	return acc
+}
+
+
 func Part1(scanner *bufio.Scanner) {
 	cards, winners := parse(scanner)
 
@@ -83,5 +95,24 @@ func Part1(scanner *bufio.Scanner) {
 }
 
 func Part2(scanner *bufio.Scanner) {
-	parse(scanner)
+	cards, winners := parse(scanner)
+	counts := make([]int64, len(cards))
+
+	for i, card := range(cards) {
+		n := matches(card,  winners[i])
+
+		counts[i] += 1
+		for j := 0; j < n; j++ {
+			counts[i+j+1] += counts[i]
+		}
+
+		//fmt.Println(i, counts, n)
+	}
+
+	acc := int64(0)
+	for _, i := range(counts) {
+		acc += i
+	}
+
+	fmt.Println(acc)
 }
