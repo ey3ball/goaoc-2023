@@ -4,11 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"github.com/ey3ball/goaoc-2023/day05"
+	"github.com/ey3ball/goaoc-2023/day06"
 )
 
 func main() {
-	f, err := os.Open("./input/day05.txt")
+	f, err := os.Open("./input/day06.txt")
 	if err != nil {
 		fmt.Println("Bye")
 		return
@@ -17,11 +17,11 @@ func main() {
 	scanner := bufio.NewScanner(f)
 
 	fmt.Println("Part 1")
-	day05.Part1(scanner)
+	day06.Part1(scanner)
 
 	f.Seek(0, 0)
 	scanner = bufio.NewScanner(f)
 
 	fmt.Println("Part 2")
-	day05.Part2(scanner)
+	day06.Part2(scanner)
 }
