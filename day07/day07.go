@@ -28,12 +28,23 @@ var labels = [13]string{
 	"A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2",
 }
 
+var labels2 = [13]string{
+	"A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J",
+}
+
+
 var heads = make(map[string]int)
+var heads2 = make(map[string]int)
 
 func init() {
 	for i, l := range(labels) {
 		heads[l] = len(labels) - i - 1
 	}
+
+	for i, l := range(labels2) {
+		heads2[l] = len(labels2) - i - 1
+	}
+
 }
 
 func stats(hand []string) map[int][]string {
@@ -51,8 +62,35 @@ func stats(hand []string) map[int][]string {
 	return freqs
 }
 
+func stats2(hand []string) map[int][]string {
+	counter := make(map[string]int)
+
+	max := 0
+	max_r := ""
+	for _, r := range(hand) {
+		counter[r] += 1
+		if counter[r] > max && r != "J" {
+			max_r = r
+			max = counter[r]
+		}
+	}
+
+	if max_r != "" {
+		counter[max_r] += counter["J"]
+		counter["J"] = 0
+	}
+
+	freqs := make(map[int][]string)
+	for card, freq := range(counter) {
+		freqs[freq] = append(freqs[freq], card)
+	}
+
+	return freqs
+}
+
+
 func strength(hand []string) int {
-	freqs := stats(hand)
+	freqs := stats2(hand)
 
 	if len(freqs[5]) == 1 {
 		return 6
@@ -73,10 +111,10 @@ func strength(hand []string) int {
 
 func less(hand1 []string, hand2 []string) bool {
 	for i := range(hand1) {
-		if heads[hand1[i]] < heads[hand2[i]] {
+		if heads2[hand1[i]] < heads2[hand2[i]] {
 			return true
 		}
-		if heads[hand1[i]] > heads[hand2[i]] {
+		if heads2[hand1[i]] > heads2[hand2[i]] {
 			return false
 		}
 	}
