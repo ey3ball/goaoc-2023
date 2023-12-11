@@ -122,40 +122,36 @@ func InOutPos(w World, p Pos, with_heading Pos) (Pos, bool) {
 	return Pos{}, false
 }
 
-func maze(w World, start State) bool {
-	s := []State{start}
+func maze(w World, start State) int {
+	visited := []State{start}
 
-	for len(s) != 0 {
-		new_state := []State{}
-		for _, cur := range(s) {
-			//fmt.Println(cur)
-			next_pos := Add(cur.Position, cur.Direction)
-			if next_pos == start.Position {
-				fmt.Println("#### Mazel tov !")
-				return true
-			}
+	for {
+		cur := visited[len(visited) - 1]
 
-			if Verbose { fmt.Println("N:", next_pos) }
-
-			if !Reachable(next_pos, w) {
-				if Verbose { fmt.Println("NR:") }
-				continue
-			}
-
-			next_heading, ok := InOutPos(w, next_pos, cur.Direction)
-			if !ok {
-				continue
-			}
-			if Verbose { fmt.Println("H:", next_heading) }
-
-			new_state = append(new_state, State{next_heading, next_pos})
-
+		fmt.Println(cur)
+		next_pos := Add(cur.Position, cur.Direction)
+		if next_pos == start.Position {
+			fmt.Println("#### Mazel tov ! ", len(visited))
+			return len(visited) / 2
 		}
-		s = new_state
-		fmt.Println("State:", s)
+
+		if Verbose { fmt.Println("N:", next_pos) }
+
+		if !Reachable(next_pos, w) {
+			if Verbose { fmt.Println("NR:") }
+			break
+		}
+
+		next_heading, ok := InOutPos(w, next_pos, cur.Direction)
+		if !ok {
+			break
+		}
+		if Verbose { fmt.Println("H:", next_heading) }
+
+		visited = append(visited, State{next_heading, next_pos})
 	}
 
-	return false
+	return -1
 }
 
 func Part1(scanner *bufio.Scanner) {
@@ -168,17 +164,19 @@ func Part1(scanner *bufio.Scanner) {
 		{West, world.Start},
 	}
 
+	steps := -1
 	for _, s := range(start_states) {
 		fmt.Println("", s)
 		fmt.Println(">> Enter maze from : ", s)
-		exit := maze(world, s)
+		steps = maze(world, s)
 
-		if exit {
+		if steps != -1 {
 			break
 		}
 	}
 
 	Show(world)
+	fmt.Println("Steps: ", steps)
 }
 
 func Part2(scanner *bufio.Scanner) {
