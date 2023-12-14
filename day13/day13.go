@@ -90,7 +90,7 @@ func Reflections(ps [][][]rune, mirror bool) int {
 			if all_ok {
 				acc += line
 				r++
-				fmt.Println("Reflected at ", line, size)
+				//fmt.Println("Reflected at ", line, size)
 				//break
 			}
 		}
@@ -98,6 +98,48 @@ func Reflections(ps [][][]rune, mirror bool) int {
 	fmt.Println("#", r)
 	return acc
 }
+
+func Count(s1 []rune, s2 []rune) int {
+	cnt := 0
+	for i := range(s1) {
+		if s1[i] != s2[i] {
+			cnt += 1
+		}
+	}
+	return cnt
+}
+
+func Fixes(ps [][][]rune, mirror bool) int {
+	acc := 0
+	r := 0
+	for _, p := range(ps) {
+		if mirror {
+			p = transpose(p)
+		}
+
+		width := len(p)
+		//fmt.Println("go w:", width)
+
+		for line := 1; line < width; line++ {
+			size := min(width - line, line)
+			errors := 0
+
+			for j := 0; j < size; j++ {
+				errors += Count(p[line - size + j], p[line + size - j - 1])
+			}
+
+			if errors == 1 {
+				acc += line
+				r++
+				//fmt.Println("Reflected at ", line, size)
+				//break
+			}
+		}
+	}
+	fmt.Println("#", r)
+	return acc
+}
+
 
 func Part1(scanner *bufio.Scanner) {
 	ps := parse(scanner)
@@ -109,7 +151,10 @@ func Part1(scanner *bufio.Scanner) {
 }
 
 func Part2(scanner *bufio.Scanner) {
-	parse(scanner)
+	ps := parse(scanner)
 
-	fmt.Println(0)
+	acc := Fixes(ps, true)
+	acc += 100*Fixes(ps, false)
+
+	fmt.Println(acc)
 }
