@@ -66,6 +66,8 @@ func parse(scanner *bufio.Scanner) World {
 	YMax := 0
 	YMin := 0
 
+	pos := make([]Pos, 0)
+
 	for _, e := range(edges) {
 		X += e.Direction.X * e.Count
 		Y += e.Direction.Y * e.Count
@@ -190,6 +192,23 @@ func Draw(w World) [][]int {
 	}
 	return m
 }
+
+func Points(w World) [][]int {
+	m := make([][]int, w.YMax-w.YMin+1)
+	for i := range(m) {
+		m[i] = make([]int, w.XMax-w.XMin+1)
+	}
+
+	p := Pos{-w.XMin,-w.YMin}
+	for _, e := range(w.Edges) {
+		for i := 0; i < e.Count; i++ {
+			p = Add(p, e.Direction)
+			m[p.Y][p.X] = e.Color
+		}
+	}
+	return m
+}
+
 
 func Show(m [][]int) int {
 	cnt := 0
